@@ -12,15 +12,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Install Microsoft.Extensions.Configuration.AzureAppConfiguration package
+// Install Microsoft.Azure.CognitiveServices.Vision.ComputerVision package
 builder.Configuration
     .AddAzureAppConfiguration(options =>
     {
         options.Connect(builder.Configuration.GetConnectionString("AzureAppConfiguration"));
+        // Select by Key and Label
         options
             .Select(KeyFilter.Any, LabelFilter.Null)
             .Select(KeyFilter.Any, "Test");
     });
 
+// Create settings classes for Configuration
 builder.Services.Configure<AzureSettings>(builder.Configuration);
 builder.Services.Configure<AzureComputerVisionSettings>(builder.Configuration.GetSection("Azure:ComputerVision"));
 
